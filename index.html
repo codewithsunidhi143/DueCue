@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DueCue – Your cue to get it done</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- WELCOME SCREEN: shown only when no name is saved yet -->
+  <div id="welcome" class="welcome" hidden>
+    <form id="welcomeForm" class="card welcome-box">
+      <div class="brand">
+        <div class="logo">D</div>
+        <div><strong>DueCue</strong><small>by DEBUG DIVAS</small></div>
+      </div>
+      <h1>Welcome to DueCue 👋</h1>
+      <p class="muted">Your cue to get it done.</p>
+      <label>Enter your name<input id="wName" maxlength="30" autocomplete="given-name" placeholder="e.g. Aarav" required></label>
+      <p id="wMsg" class="muted"></p>
+      <button class="btn" type="submit">Continue</button>
+    </form>
+  </div>
+
+  <!-- Top bar: only visible on mobile/tablet -->
+  <header class="topbar">
+    <button id="menuBtn" class="icon-btn" aria-label="Open menu">☰</button>
+    <strong>DueCue</strong>
+  </header>
+  <div id="overlay"></div>
+
+  <!-- SIDEBAR NAVIGATION -->
+  <aside id="sidebar" class="sidebar">
+    <div class="brand">
+      <div class="logo">D</div>
+      <div><strong>DueCue</strong><small>by DEBUG DIVAS</small></div>
+    </div>
+    <nav>
+      <button class="nav-btn active" data-view="dashboard"><span>◧</span> Dashboard</button>
+      <button class="nav-btn" data-view="assignments"><span>✎</span> Assignments</button>
+      <button class="nav-btn" data-view="timetable"><span>▦</span> Timetable</button>
+      <button class="nav-btn" data-view="attendance"><span>◔</span> Attendance</button>
+      <button class="nav-btn" data-view="tests"><span>✦</span> Tests &amp; Exams</button>
+      <button class="nav-btn" data-view="settings"><span>⚙</span> Settings</button>
+    </nav>
+    <p class="tagline">Turning chaos into code.</p>
+  </aside>
+
+  <main>
+    <!-- ============ DASHBOARD ============ -->
+    <section id="view-dashboard" class="view active">
+      <div class="hero card">
+        <div>
+          <h1 id="greeting"></h1>
+          <p id="subGreeting" class="muted"></p>
+        </div>
+        <div id="todayDate" class="pill"></div>
+      </div>
+
+      <div id="nextCard" class="card next"></div>
+      <div id="stats" class="stats"></div>
+
+      <div class="grid2">
+        <div class="card"><h2>Priority tasks</h2><div id="priorityList"></div></div>
+        <div class="card"><h2>Smart reminders</h2><div id="reminderList"></div></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><h2>Upcoming tests</h2><div id="dashTests"></div></div>
+        <div class="card"><h2>Today's classes</h2><div id="dashClasses"></div></div>
+      </div>
+
+      <div class="card">
+        <h2>Quick actions</h2>
+        <div class="row">
+          <button class="btn" data-goto="assignments" data-focus="aTitle">+ Assignment</button>
+          <button class="btn ghost" data-goto="tests" data-focus="tName">+ Test</button>
+          <button class="btn ghost" data-goto="timetable" data-focus="cSubject">+ Class</button>
+          <button class="btn ghost" data-goto="attendance" data-focus="attAttended">Update attendance</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ASSIGNMENTS ============ -->
+    <section id="view-assignments" class="view">
+      <h1>Assignments</h1>
+      <form id="assignForm" class="card form">
+        <h2 id="assignFormTitle">Add assignment</h2>
+        <label>Title<input id="aTitle" required maxlength="60" placeholder="e.g. Physics Assignment 3"></label>
+        <label>Subject<input id="aSubject" required maxlength="30" placeholder="e.g. Physics"></label>
+        <label>Deadline<input id="aDeadline" type="date" required></label>
+        <label>Workload
+          <select id="aWorkload"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select>
+        </label>
+        <label>Professor strictness
+          <select id="aStrict"><option value="low">Relaxed</option><option value="medium" selected>Normal</option><option value="high">Strict</option></select>
+        </label>
+        <div class="row">
+          <button class="btn" type="submit" id="assignSubmit">Add assignment</button>
+          <button class="btn ghost" type="button" id="assignCancel" hidden>Cancel edit</button>
+        </div>
+      </form>
+      <div id="assignList"></div>
+    </section>
+
+    <!-- ============ TIMETABLE ============ -->
+    <section id="view-timetable" class="view">
+      <h1>Timetable</h1>
+      <form id="classForm" class="card form">
+        <h2>Add class</h2>
+        <label>Subject<input id="cSubject" required maxlength="30" placeholder="e.g. Maths"></label>
+        <label>Day
+          <select id="cDay"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option></select>
+        </label>
+        <label>Start<input id="cStart" type="time" required value="09:00"></label>
+        <label>End<input id="cEnd" type="time" required value="10:00"></label>
+        <div class="row"><button class="btn" type="submit">Add class</button></div>
+      </form>
+      <div id="ttGrid" class="tt-grid"></div>
+    </section>
+
+    <!-- ============ ATTENDANCE ============ -->
+    <section id="view-attendance" class="view">
+      <h1>Attendance Guard</h1>
+      <form id="attForm" class="card form">
+        <h2>Your numbers</h2>
+        <label>Classes attended<input id="attAttended" type="number" min="0" required></label>
+        <label>Total classes held<input id="attTotal" type="number" min="1" required></label>
+        <div class="row"><button class="btn" type="submit">Calculate &amp; save</button></div>
+      </form>
+      <div id="attResult" class="card"></div>
+    </section>
+
+    <!-- ============ TESTS ============ -->
+    <section id="view-tests" class="view">
+      <h1>Tests &amp; Exams</h1>
+      <form id="testForm" class="card form">
+        <h2>Add test / exam</h2>
+        <label>Name<input id="tName" required maxlength="60" placeholder="e.g. Unit Test 1"></label>
+        <label>Subject<input id="tSubject" required maxlength="30" placeholder="e.g. Physics"></label>
+        <label>Date<input id="tDate" type="date" required></label>
+        <div class="row"><button class="btn" type="submit">Add test</button></div>
+      </form>
+      <div id="testList"></div>
+    </section>
+
+    <!-- ============ SETTINGS ============ -->
+    <section id="view-settings" class="view">
+      <h1>Settings</h1>
+      <form id="settingsForm" class="card form">
+        <label>Your name<input id="sName" maxlength="30" placeholder="Used in your greeting"></label>
+        <label>Required attendance (%)<input id="sRequired" type="number" min="1" max="99" required></label>
+        <div class="row"><button class="btn" type="submit">Save settings</button></div>
+        <p id="settingsMsg" class="muted"></p>
+      </form>
+      <div class="card">
+        <h2>Data</h2>
+        <div class="row">
+          <button class="btn ghost" id="resetDemo">Reload demo data</button>
+          <button class="btn danger" id="clearAll">Clear everything</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
